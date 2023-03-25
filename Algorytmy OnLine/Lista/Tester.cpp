@@ -1,4 +1,6 @@
 #include "List.hpp"
+#include "Distribution.hpp"
+
 #include <iostream>
 
 template<typename T>
@@ -10,24 +12,15 @@ void printList(std::list<T>& list){
 }
 
 int main(){
-    Count f;
-    f.access(1);
-    printList<CountableValue>(f.list);
-    f.access(1);
-    printList<CountableValue>(f.list);
-    f.access(1);
-    printList<CountableValue>(f.list);
-    f.access(2);
-    printList<CountableValue>(f.list);
-    f.access(3);
-    printList<CountableValue>(f.list);
-    f.access(3);
-    printList<CountableValue>(f.list);
-    f.access(2);
-    printList<CountableValue>(f.list);
-    f.access(2);
-    printList<CountableValue>(f.list);
-    f.access(2);
-    printList<CountableValue>(f.list);
+    try{
+        std::shared_ptr<VariableProbability> vp = std::make_shared<UniformProbability>(UniformProbability());
+        DiscreteDistribution dd(vp);
+
+        std::cout << dd.getRandom() << "\n";
+    
+    }
+    catch(std::exception& e){
+        std::cout << "Error: " << e.what() << "\n";
+    }
     return 0;
 }

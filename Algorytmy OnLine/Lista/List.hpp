@@ -2,30 +2,20 @@
 #include <list>
 #include <functional>
 #include <algorithm>
-#include <ostream>
 
-using Value = uint32_t;
-using Cost = uint32_t;
-
-struct CountableValue{
-    CountableValue(Value v) : v(v), count(1) {}
-    Value v;
-    size_t count;
-
-    friend std::ostream& operator<<(std::ostream& os, const CountableValue& dt);
-};
+#include "Types.hpp"
 
 class ListAccesser{
     public:
     virtual ~ListAccesser() {}
-    virtual Cost access(Value value) = 0;
+    virtual Cost access(Variable value) = 0;
 };
 
 template<typename InternalListType>
 class TypableListAccesser : public ListAccesser {
     public:
 
-    using EqualFunction = std::function<bool(const InternalListType&, const Value&)>;
+    using EqualFunction = std::function<bool(const InternalListType&, const Variable&)>;
     using ListType = typename std::list<InternalListType>;
     using ListIterator = typename ListType::iterator;
 
@@ -33,7 +23,7 @@ class TypableListAccesser : public ListAccesser {
         : eq(equalFunction) {}
     virtual ~TypableListAccesser() = default;
 
-    Cost access(Value value) override {
+    Cost access(Variable value) override {
         auto current = list.begin();
         auto end = list.end();
         Cost accessed = 0;
@@ -58,73 +48,43 @@ class TypableListAccesser : public ListAccesser {
     virtual void onAccess(ListIterator& it) = 0;
 };
 
-class Simple : public TypableListAccesser<Value> {
+class Simple : public TypableListAccesser<Variable> {
     public:
-    Simple() : TypableListAccesser<Value>(EqualFunction([](const Value& a, const Value& b){return a == b;})) {}
-    ~Simple() {}
+    Simple();
+    ~Simple();
 
-    static std::shared_ptr<ListAccesser> create() {
-        return std::make_shared<Simple>(Simple());
-    }
+    static std::shared_ptr<ListAccesser> create();
     private:
-    void onAccess(ListIterator& it) override {}
+    void onAccess(ListIterator& it) override;
 
 };
 
-class MoveToFront : public TypableListAccesser<Value> {
+class MoveToFront : public TypableListAccesser<Variable> {
     public:
-    MoveToFront() : TypableListAccesser<Value>(EqualFunction([](const Value& a, const Value& b){return a == b;})) {}
-    ~MoveToFront() = default;
+    MoveToFront();
+    ~MoveToFront();
     
-    static std::shared_ptr<ListAccesser> create() {
-        return std::make_shared<MoveToFront>(MoveToFront());
-    }
+    static std::shared_ptr<ListAccesser> create();
     private:
-    void onAccess(ListIterator& it) override {
-        auto temp = (*it);
-        auto nextTemp = (*(list.begin()));
-        auto current = list.begin();
-        while(current != it){
-            (*current) = temp;
-            temp = nextTemp;
-            ++current;
-            nextTemp = (*current);
-        }
-        (*it) = temp;
-    }
+    void onAccess(ListIterator& it);
 };
 
-class Transpose : public TypableListAccesser<Value> {
+class Transpose : public TypableListAccesser<Variable> {
     public:
-    Transpose() : TypableListAccesser<Value>(EqualFunction([](const Value& a, const Value& b){return a == b;})) {}
-    ~Transpose() = default;
+    Transpose();
+    ~Transpose();
 
-    static std::shared_ptr<ListAccesser> create() {
-        return std::make_shared<Transpose>(Transpose());
-    }
+    static std::shared_ptr<ListAccesser> create();
 
     private:
-    void onAccess(ListIterator& it) override {
-        if(it == list.begin())
-            return;
-        auto prev = it;
-        --prev;
-        auto temp = (*prev);
-        (*prev) = (*it);
-        (*it) = temp;
-    }
+    void onAccess(ListIterator& it) override;
 };
 
-class Count : public TypableListAccesser<CountableValue> {
+class Count : public TypableListAccesser<CountableVariable> {
     public:
-    Count() : TypableListAccesser<CountableValue>(EqualFunction([](const CountableValue& a, const Value& b){return a.v == b;})) {}
-    ~Count() = default;
-    static std::shared_ptr<ListAccesser> create() {
-        return std::make_shared<Count>(Count());
-    }
+    Count();
+    ~Count();
+    static std::shared_ptr<ListAccesser> create();
     private:
-    void onAccess(ListIterator& it) override {
-        (*it).count++;
-        list.sort([](const CountableValue& a, const CountableValue& b) { return a.count > b.count; });
-    }
+    void onAccess(ListIterator& it) override;
 };
