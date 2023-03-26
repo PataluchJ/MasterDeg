@@ -3,6 +3,7 @@
 #include <math.h>
 #include <iostream>
 #include <climits>
+#include <exception>
 
 VariableProbability::VariableProbability(Range range)
     : range(range) {}
@@ -16,17 +17,18 @@ DiscreteDistribution::DiscreteDistribution(std::shared_ptr<VariableProbability> 
     for(Variable i = 1; i <= range; i++){
         variableProbabilityCache[i] = variableProbabilityCache[i-1] + probability->propability(i);
     }
-    /*
+    //*
     //variableProbabilityCache[range] = 1.0; // I hate floating point error accumulation
-    if(fabs(variableProbabilityCache.back() - 1.0) > std::numeric_limits<double>::epsilon() )
+    if((fabs(variableProbabilityCache.back() - 1.0) ) > std::numeric_limits<double>::epsilon() * 10.0 )
     {
         std::cout << "Distribution sanity failure! " << variableProbabilityCache.back() <<
-            " " << fabs(variableProbabilityCache.back() - 1.0) << " > " << std::numeric_limits<double>::epsilon() << "\n";
+            " " << fabs(variableProbabilityCache.back() - 1.0)  << " > " << std::numeric_limits<double>::epsilon() * 10.0 << "\n";
 
-        throw "Distribution sanity failure.";
+        //throw std::runtime_error("Distribution sanity failure.");
     }
-    */
-    gen = std::make_shared<std::mt19937>(std::mt19937(rd()));
+    //*/
+    //rd = std::make_shared<std::random_device>(new std::random_device());
+    gen = std::make_shared<std::mt19937>(std::mt19937((*rd)()));
     dis = std::make_shared<std::uniform_real_distribution<>>(std::uniform_real_distribution<>(0.0, variableProbabilityCache.back()));
 }
 
@@ -36,12 +38,12 @@ Range DiscreteDistribution::getRange(){
 
 Variable DiscreteDistribution::getRandom(){
     double x = (*dis)(*gen);
-    for(Variable v = 1; v < range; v++){
-        if(x < variableProbabilityCache[v])
+    for(Variable v = 1; v <= range; v++){
+        if(x - variableProbabilityCache[v] < 0.0)
             return v;
     }
-    std::cout << "Random value out of distribution range. " << x << "\n";
-    throw "Random value out of distribution range.";
+    std::cout << "Random value out of distribution range. Generated " << x << " while last cache is " << variableProbabilityCache.back() << "\n";
+    throw std::runtime_error("Random value out of distribution range");
 }
 
 UniformProbability::UniformProbability(Range range)

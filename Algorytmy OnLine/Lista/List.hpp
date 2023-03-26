@@ -9,6 +9,7 @@ class ListAccesser{
     public:
     virtual ~ListAccesser() {}
     virtual Cost access(Variable value) = 0;
+    virtual void clear() = 0;
 };
 
 template<typename InternalListType>
@@ -41,7 +42,7 @@ class TypableListAccesser : public ListAccesser {
         // onAccess((--list.end()));
         return accessed;
     }
-
+    void clear() { list.clear(); }
     std::list<InternalListType> list;
     protected:
     const EqualFunction eq;

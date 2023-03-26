@@ -30,7 +30,7 @@ class DiscreteDistribution{
     Range range;
     std::vector<double> variableProbabilityCache;
 
-    std::random_device rd{};
+    std::shared_ptr<std::random_device> rd{new std::random_device()};
     std::shared_ptr<std::mt19937> gen{nullptr};
     std::shared_ptr<std::uniform_real_distribution<>> dis{nullptr};
 
