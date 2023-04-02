@@ -1,0 +1,35 @@
+/* Jakub Pataluch 2023 */
+data;
+
+set Sites := "Opole" "Brzeg" "Nysa" "Prudnik" "Strzelce Opolskie" "Kozle" "Raciborz";
+set Types := "Typ 1" "Typ 2";
+
+param TransportationCost := "Typ 1" 1 "Typ 2" 1.2;
+
+param Deficit:      "Typ 1" "Typ 2" :=
+        "Opole"     0       2
+        "Brzeg"     10      0
+        "Nysa"      0       0
+        "Prudnik"   4       0
+"Strzelce Opolskie" 0       4
+        "Kozle"     8       2
+        "Raciborz"  0       1;
+
+param Excess:       "Typ 1" "Typ 2" :=
+        "Opole"     7       0
+        "Brzeg"     0       1
+        "Nysa"      6       2
+        "Prudnik"   0       10
+"Strzelce Opolskie" 5       0
+        "Kozle"     0       0
+        "Raciborz"  0       0;
+
+param Distance:     "Opole" "Brzeg" "Nysa"  "Prudnik"   "Strzelce Opolskie" "Kozle" "Raciborz" :=
+        "Opole"     0       47      57      51          34                  52      79
+        "Brzeg"     47      0       52      80          99                  99      125
+        "Nysa"      57      52      0       32          95                  78      92
+        "Prudnik"   51      80      32      0           68                  48      62
+"Strzelce Opolskie" 34      99      95      68          0                   135     61
+        "Kozle"     52      99      78      48          135                 0       35
+        "Raciborz"  79      125     92      62          61                  35      0;
+end;

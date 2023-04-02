@@ -1,0 +1,22 @@
+@startuml KOKOS
+actor       Verifier    as V order 10
+actor       Prover      as P order 30
+
+note over V
+Verifier chooses a starting position p
+end note
+
+V -> P : p
+
+note over P
+Given a starting position p, prover using the getNthPosition
+calculates position p'.
+end note
+
+P -> V : p'
+
+note over V
+Verifier check if p' is correct. If it is, the verification
+process is succesful.
+end note
+@endumla

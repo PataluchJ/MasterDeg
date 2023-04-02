@@ -1,0 +1,6 @@
+/* Jakub Pataluch 2023 */
+data;
+
+param N := 10;
+
+end;
