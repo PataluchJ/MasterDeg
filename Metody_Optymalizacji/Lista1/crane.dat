@@ -29,7 +29,7 @@ param Distance:     "Opole" "Brzeg" "Nysa"  "Prudnik"   "Strzelce Opolskie" "Koz
         "Brzeg"     47      0       52      80          99                  99      125
         "Nysa"      57      52      0       32          95                  78      92
         "Prudnik"   51      80      32      0           68                  48      62
-"Strzelce Opolskie" 34      99      95      68          0                   135     61
-        "Kozle"     52      99      78      48          135                 0       35
+"Strzelce Opolskie" 34      99      95      68          0                   26      61
+        "Kozle"     52      99      78      48          26                  0       35
         "Raciborz"  79      125     92      62          61                  35      0;
 end;
