@@ -57,15 +57,16 @@ int main(){
     std::vector<std::shared_ptr<Result>> results;
 
     auto getTestData = [&data,&results](){
-        std::vector<size_t> ks{2, 3, 10, 100, 400};
-        
+        //std::vector<size_t> ks{2, 3, 10, 100, 400};
+        std::vector<size_t> ks{400};
+
         size_t rangeStart = 1;
         size_t rangeStop = 1;
         for(size_t n = 1; n <= 10000 ; n++){
             rangeStart = rangeStop;
             rangeStop += n;
             for(auto k : ks){
-                results.push_back(std::shared_ptr<Result>(new Result(std::to_string(n) + ";" + std::to_string(k))));
+                results.push_back(std::shared_ptr<Result>(new Result(std::to_string(n))));
                 data.push_back(std::unique_ptr<TestData>(new TestData(
                     results.back(),
                     std::shared_ptr<HashFunction>(new StandardHash()),
@@ -96,7 +97,7 @@ int main(){
     //*/
 
     std::fstream out;
-    out.open("results.txt", std::fstream::ios_base::out);
+    out.open("k400.txt", std::fstream::ios_base::out);
     if(!out.is_open()){
         std::cout <<"Failed to open file for saving results!\n";
         return -1;
@@ -123,10 +124,10 @@ int main(){
     }
     std::cout << "Saving to file...\n";
 
-    out << "n;k;m\n";
+    out << "n;m\n";
     for(auto& r : results){
         //std::cout << r->name << ";" << r->estimatedSize << "\n";
-        out << r->name << ";" << r->estimatedSize << "\n";
+        out << r->estimatedSize << "\n";
     }
 
     out.close();

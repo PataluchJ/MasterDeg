@@ -14,7 +14,8 @@ double calcAvg(std::vector<double>& vec){
 
 
 void run(){
-    auto hash = StandardHash();
+    //auto hash = StandardHash();
+    auto hash = BiasedHash(3, [](Hash a, Hash b){return a > b;});
     size_t testSize = UINT32_MAX - 1;
     auto gen = RangeBasedSetGenerator(0, testSize);
 

@@ -11,5 +11,6 @@ set(sources
     )
 
 add_executable(Tester ${sources})
-add_executable(An StatAnalyzer.cpp Set.cpp)
+add_executable(HS StatAnalyzer.cpp Set.cpp)
 add_executable(Op OptimalK.cpp Set.cpp MinCount.cpp)
+add_executable(BH BadHashTester.cpp Set.cpp MinCount.cpp ConcreateHashFunction.hpp)
